@@ -1,0 +1,2543 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Premium Button Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lobster&family=Poppins:wght@400;600&family=Raleway:wght@400;600&family=Montserrat:wght@400;600&family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css"
+    />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Boldonse&family=Hubot+Sans:ital,wght@0,200..900;1,200..900&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <style>
+      :root {
+        --bg-color: #f8f9fc;
+        --text-color: #1a1a2e;
+        --accent-color: rgb(0, 47, 255);
+        --card-bg: #f1f1f1;
+        --card-shadow: 0 8px 30px #8a8a8a1f;
+        --button-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --border-color: rgba(0, 0, 0, 0.281);
+        --hover-color: rgba(67, 97, 238, 0.05);
+      }
+
+      .dark-mode {
+        --bg-color: #111827;
+        --text-color: #f3f4f6;
+        --accent-color: #0073ff;
+        --card-bg: #1f2937;
+        --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        --button-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        --border-color: rgba(255, 255, 255, 0.08);
+        --hover-color: rgba(96, 165, 250, 0.05);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: "Hubot Sans", monospace;
+        transition: all 0.3s ease;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        background-color: var(--card-bg);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--accent-color);
+        font-family: 'boldonse';
+      }
+
+      .logo i {
+        font-size: 1.25rem;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      main {
+        flex: 1;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .theme-toggle {
+        background: none;
+        border: none;
+        color: var(--text-color);
+        font-size: 1.25rem;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+      }
+
+      .theme-toggle:hover {
+        background-color: var(--hover-color);
+      }
+
+      .history-controls {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .history-btn {
+        background: none;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+      }
+
+      .history-btn:hover:not(:disabled) {
+        background-color: var(--hover-color);
+        border-color: var(--accent-color);
+      }
+
+      .history-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .button-preview-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .section-title i {
+        color: var(--accent-color);
+        font-size: 1.1rem;
+      }
+
+      .button-preview {
+        width: 100%;
+        height: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--card-bg);
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        position: relative;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        font-family: "hubot sans", monospace;
+      }
+
+      .button-preview::before {
+        content: "";
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          var(--accent-color) 0%,
+          rgba(255, 255, 255, 0) 70%
+        );
+        opacity: 0.05;
+        z-index: 0;
+      }
+
+      .controls-container {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .control-card {
+        flex: 1;
+        min-width: 300px;
+        background-color: var(--card-bg);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .card-title i {
+        color: var(--accent-color);
+        font-size: 0.9rem;
+      }
+
+      .style-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 0.75rem;
+      }
+
+      .style-btn {
+        border: 1px solid var(--border-color);
+        background-color: var(--card-bg);
+        color: var(--text-color);
+        border-radius: 8px;
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        text-align: center;
+        height: 70px;
+        font-family: "Hubot Sans", sans-serif;
+      }
+
+      .style-btn:hover {
+        background-color: var(--hover-color);
+        border-color: var(--accent-color);
+      }
+
+      .style-btn.active {
+        background-color: var(--accent-color);
+        color: white;
+        border-color: var(--accent-color);
+      }
+
+      .style-btn i {
+        font-size: 1.2rem;
+      }
+
+      .generate-btn {
+        padding: 0.75rem 1.5rem;
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-family: "Hubot Sans", sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
+      }
+
+      .generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 10px rgba(67, 97, 238, 0.3);
+      }
+
+      .code-snippet {
+        background-color: var(--card-bg);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        margin-top: 2rem;
+      }
+
+      .snippet-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .snippet-title {
+        font-size: 1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .snippet-title i {
+        color: var(--accent-color);
+      }
+
+      .snippet-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .snippet-btn {
+        background: none;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        font-family: "Hubot Sans", sans-serif;
+      }
+
+      .snippet-btn:hover {
+        background-color: var(--hover-color);
+        border-color: var(--accent-color);
+      }
+
+      .snippet-btn i {
+        margin-right: 0.4rem;
+      }
+
+      .snippet-content {
+        padding: 1.5rem;
+        overflow-x: auto;
+        max-height: 400px;
+        font-family: 'jetbrains mono', monospace;
+      }
+
+      code {
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      pre {
+        margin: 0;
+      }
+
+      .tab-buttons {
+        display: flex;
+        overflow-x: auto;
+        border-bottom: 1px solid var(--border-color);
+        padding: 0 1rem;
+      }
+
+      .tab-btn {
+        padding: 0.75rem 1.25rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: "Hubot Sans", sans-serif;
+        font-size: 0.9rem;
+        color: var(--text-color);
+        position: relative;
+        white-space: nowrap;
+      }
+
+      .tab-btn.active {
+        color: var(--accent-color);
+      }
+
+      .tab-btn.active::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: var(--accent-color);
+      }
+
+      .tab-btn:hover:not(.active) {
+        color: var(--accent-color);
+        opacity: 0.7;
+      }
+
+      .copy-toast {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background-color: var(--accent-color);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+
+      .copy-toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      footer {
+        padding: 1.5rem 2rem;
+        border-top: 1px solid var(--border-color);
+        text-align: center;
+        font-size: 0.875rem;
+        color: var(--text-color);
+        opacity: 0.7;
+        background-color: var(--card-bg);
+      }
+
+      /* Button styles to be used in previews */
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      @keyframes ripple {
+        0% {
+          box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
+        }
+        100% {
+          box-shadow: 0 0 0 16px rgba(255, 255, 255, 0);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20%,
+        60% {
+          transform: translateX(-2px);
+        }
+        40%,
+        80% {
+          transform: translateX(2px);
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      @keyframes jello {
+        0%,
+        11.1%,
+        100% {
+          transform: skewX(0deg) skewY(0deg);
+        }
+        22.2% {
+          transform: skewX(-12.5deg) skewY(-12.5deg);
+        }
+        33.3% {
+          transform: skewX(6.25deg) skewY(6.25deg);
+        }
+        44.4% {
+          transform: skewX(-3.125deg) skewY(-3.125deg);
+        }
+        55.5% {
+          transform: skewX(1.5625deg) skewY(1.5625deg);
+        }
+        66.6% {
+          transform: skewX(-0.78125deg) skewY(-0.78125deg);
+        }
+        77.7% {
+          transform: skewX(0.390625deg) skewY(0.390625deg);
+        }
+        88.8% {
+          transform: skewX(-0.1953125deg) skewY(-0.1953125deg);
+        }
+      }
+
+      @keyframes border-dance {
+        0% {
+          background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+        }
+        100% {
+          background-position: 100% 0, 100% 100%, 0 100%, 0 0;
+        }
+      }
+
+      /* Generated button will have these styles applied */
+      .generated-button {
+        cursor: pointer !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: nowrap !important;
+        user-select: none !important;
+        transition: all 0.3s ease !important;
+      }
+
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: rgba(155, 155, 155, 0.5);
+        border-radius: 20px;
+        border: transparent;
+      }
+
+      @media (max-width: 768px) {
+        main {
+          padding: 1rem;
+        }
+
+        .controls-container {
+          flex-direction: column;
+        }
+
+        .control-card {
+          min-width: unset;
+        }
+      }
+
+      .customization-options {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .input-group label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-color);
+      }
+
+      .input-group input {
+        padding: 0.75rem;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background-color: var(--card-bg);
+        color: var(--text-color);
+        font-family: "Hubot Sans", sans-serif;
+        transition: all 0.2s ease;
+      }
+
+      .input-group input:focus {
+        border-color: var(--accent-color);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+      }
+
+      .color-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .color-options label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-color);
+      }
+
+      .color-swatches {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .color-swatch {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 2px solid var(--border-color);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .color-swatch:hover {
+        transform: scale(1.1);
+      }
+
+      .color-swatch.active {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <i class="fas fa-wand-magic-sparkles"></i>
+        Premium Button Generator
+      </div>
+      <div class="header-actions">
+        <div class="history-controls">
+          <button class="history-btn" id="undoBtn" disabled title="Undo">
+            <i class="fas fa-undo"></i>
+          </button>
+          <button class="history-btn" id="redoBtn" disabled title="Redo">
+            <i class="fas fa-redo"></i>
+          </button>
+        </div>
+        <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="button-preview-container">
+          <h2 class="section-title">
+            <i class="fas fa-eye"></i>
+            Button Preview
+          </h2>
+          <div class="button-preview" id="buttonPreview">
+            <!-- Generated button will appear here -->
+          </div>
+        </div>
+
+        <div class="controls-container">
+          <div class="control-card">
+            <h3 class="card-title">
+              <i class="fas fa-sliders"></i>
+              Button Styles
+            </h3>
+            <div class="style-buttons" id="styleButtons">
+              <button class="style-btn active" data-style="minimal">
+                <i class="fas fa-circle"></i>
+                Minimal
+              </button>
+              <button class="style-btn" data-style="gradient">
+                <i class="fas fa-paint-brush"></i>
+                Gradient
+              </button>
+              <button class="style-btn" data-style="glass">
+                <i class="far fa-clone"></i>
+                Glass
+              </button>
+              <button class="style-btn" data-style="neobrutalism">
+                <i class="fas fa-square"></i>
+                Neobrutalism
+              </button>
+              <button class="style-btn" data-style="soft">
+                <i class="fas fa-cloud"></i>
+                Soft
+              </button>
+              <button class="style-btn" data-style="3d">
+                <i class="fas fa-cube"></i>
+                3D
+              </button>
+              <button class="style-btn" data-style="neon">
+                <i class="fas fa-lightbulb"></i>
+                Neon
+              </button>
+              <button class="style-btn" data-style="animated">
+                <i class="fas fa-magic"></i>
+                Animated
+              </button>
+            </div>
+
+            <button class="generate-btn" id="generateBtn">
+              <i class="fas fa-wand-magic-sparkles"></i> Generate Button
+            </button>
+          </div>
+
+          <div class="control-card">
+            <h3 class="card-title">
+              <i class="fas fa-history"></i>
+              Recent History
+            </h3>
+            <div id="buttonHistory">
+              <!-- Recent button history will be displayed here -->
+              <p class="empty-state">Generated buttons will appear here</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-snippet" id="codeSnippet">
+          <div class="snippet-header">
+            <div class="snippet-title">
+              <i class="fas fa-code"></i>
+              Code Snippet
+            </div>
+            <div class="snippet-actions">
+              <button class="snippet-btn" id="copyCode">
+                <i class="fas fa-copy"></i> Copy Code
+              </button>
+            </div>
+          </div>
+          <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="html">HTML</button>
+            <button class="tab-btn" data-tab="css">CSS</button>
+            <button class="tab-btn" data-tab="react">React Component</button>
+          </div>
+          <div class="snippet-content">
+            <pre><code class="language-html" id="htmlCode"><!-- HTML code will be here --></code></pre>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="copy-toast" id="copyToast">
+      <i class="fas fa-check-circle"></i>
+      Code copied to clipboard!
+    </div>
+
+    <footer>
+      <p>
+        Premium Button Generator &copy; 2025 | Created with
+        <i class="fas fa-heart" style="color: #e74c3c"></i>
+      </p>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // DOM Elements
+        const themeToggle = document.getElementById("themeToggle");
+        const generateBtn = document.getElementById("generateBtn");
+        const buttonPreview = document.getElementById("buttonPreview");
+        const undoBtn = document.getElementById("undoBtn");
+        const redoBtn = document.getElementById("redoBtn");
+        const styleButtons = document.querySelectorAll(".style-btn");
+        const buttonHistory = document.getElementById("buttonHistory");
+        const htmlCode = document.getElementById("htmlCode");
+        const copyCodeBtn = document.getElementById("copyCode");
+        const copyToast = document.getElementById("copyToast");
+        const tabButtons = document.querySelectorAll(".tab-btn");
+        const snippetContent = document.querySelector(".snippet-content");
+
+        // State variables
+        let isDarkMode = localStorage.getItem("darkMode") === "true";
+        let buttonStyleHistory = [];
+        let redoHistory = [];
+        let currentHistoryIndex = -1;
+        let activeButtonStyle = "minimal";
+        let currentTab = "html";
+
+        // Fonts array - Streamlined to more professional choices
+        const fonts = [
+          "Hubot Sans",
+          "Inter",
+          "Poppins",
+          "Montserrat",
+          "Roboto",
+        ];
+
+        // Icons array - Curated popular, recognizable icons
+        const icons = [
+          "fas fa-arrow-right",
+          "fas fa-check",
+          "fas fa-download",
+          "fas fa-play",
+          "fas fa-shopping-cart",
+          "fas fa-heart",
+          "fas fa-rocket",
+          "fas fa-bolt",
+        ];
+
+        // Button text options - Standardized for common use cases
+        const buttonTextOptions = [
+          "Get Started",
+          "Learn More",
+          "Download Now",
+          "Sign Up",
+          "Continue",
+          "Explore",
+          "Try Now",
+          "Buy Now",
+          "Submit",
+        ];
+
+        // Style-specific color palettes for better consistency
+        const styleColorPalettes = {
+          minimal: [
+            { primary: "#22d3ee", hover: "#06b6d4" }, // Cyan
+            { primary: "#14b8a6", hover: "#0d9488" }, // Teal
+            { primary: "#f43f5e", hover: "#e11d48" }, // Rose Red
+            { primary: "#eab308", hover: "#ca8a04" }, // Yellow/Gold
+            { primary: "#a855f7", hover: "#9333ea" }, // Vivid Purple
+            { primary: "#4ade80", hover: "#22c55e" }, // Soft Green
+            { primary: "#0ea5e9", hover: "#0284c7" }, // Sky Blue
+            { primary: "#facc15", hover: "#eab308" }, // Lemon Yellow
+            { primary: "#fb7185", hover: "#f43f5e" }, // Watermelon
+            { primary: "#38bdf8", hover: "#0ea5e9" }, // Electric Blue
+            { primary: "#f59e0b", hover: "#d97706" }, // Amber
+            { primary: "#c084fc", hover: "#a855f7" }, // Lavender
+            { primary: "#7dd3fc", hover: "#38bdf8" }, // Frosty Blue
+            { primary: "#f472b6", hover: "#ec4899" }, // Barbie Pink
+            { primary: "#34d399", hover: "#10b981" }, // Mint Green
+          ],
+          gradient: [
+            {
+              primary: "#ff6b6b",
+              secondaryLight: "#fca5a5",
+              secondaryDark: "#b91c1c",
+            }, // Candy Red
+            {
+              primary: "#4ade80",
+              secondaryLight: "#86efac",
+              secondaryDark: "#15803d",
+            }, // Fresh Green
+            {
+              primary: "#c084fc",
+              secondaryLight: "#e9d5ff",
+              secondaryDark: "#7e22ce",
+            }, // Lilac Purple
+            {
+              primary: "#f97316",
+              secondaryLight: "#fdba74",
+              secondaryDark: "#9a3412",
+            }, // Tangy Orange
+            {
+              primary: "#38bdf8",
+              secondaryLight: "#bae6fd",
+              secondaryDark: "#0284c7",
+            }, // Frost Blue
+            {
+              primary: "#f472b6",
+              secondaryLight: "#f9a8d4",
+              secondaryDark: "#be185d",
+            }, // Soft Pink
+            {
+              primary: "#22c55e",
+              secondaryLight: "#bbf7d0",
+              secondaryDark: "#166534",
+            }, // Leaf Green
+            {
+              primary: "#0f766e",
+              secondaryLight: "#5eead4",
+              secondaryDark: "#134e4a",
+            }, // Deep Teal
+            {
+              primary: "#7c3aed",
+              secondaryLight: "#a78bfa",
+              secondaryDark: "#581c87",
+            }, // Violet Purple
+            {
+              primary: "#fcd34d",
+              secondaryLight: "#fde68a",
+              secondaryDark: "#b45309",
+            }, // Honey Yellow
+            {
+              primary: "#3f3cbb",
+              secondaryLight: "#818cf8",
+              secondaryDark: "#1e1b4b",
+            }, // Royal Blue
+            {
+              primary: "#ffb347",
+              secondaryLight: "#ffd580",
+              secondaryDark: "#ff8800",
+            }, // Warm Peach
+            {
+              primary: "#06b6d4",
+              secondaryLight: "#67e8f9",
+              secondaryDark: "#0e7490",
+            }, // Glacier Blue
+            {
+              primary: "#f87171",
+              secondaryLight: "#fca5a5",
+              secondaryDark: "#dc2626",
+            }, // Strawberry
+            {
+              primary: "#ec4899",
+              secondaryLight: "#f9a8d4",
+              secondaryDark: "#9d174d",
+            }, // Bubblegum Pink
+            {
+              primary: "#22d3ee",
+              secondaryLight: "#67e8f9",
+              secondaryDark: "#0e7490",
+            }, // Cool Cyan
+            {
+              primary: "#f43f5e",
+              secondaryLight: "#fb7185",
+              secondaryDark: "#be123c",
+            }, // Rose
+            {
+              primary: "#facc15",
+              secondaryLight: "#fde047",
+              secondaryDark: "#ca8a04",
+            }, // Yellow Gold
+            {
+              primary: "#0ea5e9",
+              secondaryLight: "#38bdf8",
+              secondaryDark: "#0369a1",
+            }, // Sky Blue
+            {
+              primary: "#34d399",
+              secondaryLight: "#6ee7b7",
+              secondaryDark: "#065f46",
+            }, // Soft Mint
+            {
+              primary: "#a855f7",
+              secondaryLight: "#c084fc",
+              secondaryDark: "#7e22ce",
+            }, // Grape Purple
+            {
+              primary: "#fb923c",
+              secondaryLight: "#fdba74",
+              secondaryDark: "#c2410c",
+            }, // Sunset Orange
+            {
+              primary: "#e11d48",
+              secondaryLight: "#f87171",
+              secondaryDark: "#9f1239",
+            }, // Cherry
+            {
+              primary: "#3b82f6",
+              secondaryLight: "#93c5fd",
+              secondaryDark: "#1e40af",
+            }, // Bold Blue
+            {
+              primary: "#10b981",
+              secondaryLight: "#6ee7b7",
+              secondaryDark: "#064e3b",
+            }, // Deep Emerald
+          ],
+          glass: [
+            { primary: "#3b82f6", borderColor: "rgba(59, 130, 246, 0.3)" },
+            { primary: "#8b5cf6", borderColor: "rgba(139, 92, 246, 0.3)" },
+            { primary: "#ec4899", borderColor: "rgba(236, 72, 153, 0.3)" },
+            { primary: "#10b981", borderColor: "rgba(16, 185, 129, 0.3)" }, // Green
+            { primary: "#f97316", borderColor: "rgba(249, 115, 22, 0.3)" }, // Orange
+            { primary: "#06b6d4", borderColor: "rgba(6, 182, 212, 0.3)" },
+            { primary: "#f43f5e", borderColor: "rgba(244, 63, 94, 0.3)" }, // Rose
+            { primary: "#22c55e", borderColor: "rgba(34, 197, 94, 0.3)" }, // Emerald
+            { primary: "#eab308", borderColor: "rgba(234, 179, 8, 0.3)" }, // Yellow
+            { primary: "#7c3aed", borderColor: "rgba(124, 58, 237, 0.3)" }, // Deep Purple
+            { primary: "#0ea5e9", borderColor: "rgba(14, 165, 233, 0.3)" }, // Sky Blue
+            { primary: "#ef4444", borderColor: "rgba(239, 68, 68, 0.3)" }, // Red
+            { primary: "#14b8a6", borderColor: "rgba(20, 184, 166, 0.3)" }, // Teal
+            { primary: "#4ade80", borderColor: "rgba(74, 222, 128, 0.3)" }, // Mint Green
+            { primary: "#facc15", borderColor: "rgba(250, 204, 21, 0.3)" }, // Lemon Yellow
+            { primary: "#38bdf8", borderColor: "rgba(56, 189, 248, 0.3)" }, // Sky Blue
+            { primary: "#c084fc", borderColor: "rgba(192, 132, 252, 0.3)" }, // Lilac Purple
+            { primary: "#fb7185", borderColor: "rgba(251, 113, 133, 0.3)" }, // Blush Pink
+            { primary: "#fbbf24", borderColor: "rgba(251, 191, 36, 0.3)" }, // Mustard Yellow
+            { primary: "#3f3cbb", borderColor: "rgba(63, 60, 187, 0.3)" }, // Royal Blue
+            { primary: "#0f766e", borderColor: "rgba(15, 118, 110, 0.3)" }, // Deep Teal
+            { primary: "#fcd34d", borderColor: "rgba(252, 211, 77, 0.3)" }, // Banana Gold
+            { primary: "#a3e635", borderColor: "rgba(163, 230, 53, 0.3)" }, // Cyan
+            { primary: "#6366f1", borderColor: "rgba(99, 102, 241, 0.3)" },
+          ],
+          neobrutalism: [
+            { primary: "#ff2e63", hover: "#e3194f" },
+            { primary: "#0a84ff", hover: "#0077e6" },
+            { primary: "#00c16e", hover: "#00a85c" },
+            { primary: "#ffbe0b", hover: "#e69f00" }, // Yellow
+            { primary: "#9333ea", hover: "#7e22ce" }, // Purple
+            { primary: "#000000", hover: "#2d3748" }, // Black\
+            { primary: "#ff006e", hover: "#d6005e" }, // Hot Pink
+            { primary: "#3a0ca3", hover: "#2c0991" }, // Deep Indigo
+            { primary: "#ff6d00", hover: "#e65f00" }, // Loud Orange
+            { primary: "#06d6a0", hover: "#04b88a" }, // Aqua Green
+            { primary: "#f72585", hover: "#d61e73" }, // Neon Rose
+            { primary: "#3d405b", hover: "#2b2c3f" }, // Grungy Blue-Grey
+            { primary: "#7209b7", hover: "#5a0898" }, // Vivid Purple
+            { primary: "#00b4d8", hover: "#0099bb" }, // Electric Blue
+            { primary: "#ff1d58", hover: "#e6004a" }, // Barbie Core Red
+            { primary: "#2b2d42", hover: "#1c1d2c" }, // Muted Dark
+            { primary: "#ff3366", hover: "#cc2a52" }, // Raspberry Red
+            { primary: "#00f5d4", hover: "#00d4b4" }, // Toxic Mint
+            { primary: "#ff9f1c", hover: "#e68a0f" }, // Golden Orange
+            { primary: "#8338ec", hover: "#6f2fd2" }, // Blurple
+            { primary: "#ff0054", hover: "#d90049" }, // Flash Pink
+            { primary: "#118ab2", hover: "#0f7a9d" }, // Cool Teal
+            { primary: "#ef233c", hover: "#c71128" }, // Blood Red
+            { primary: "#fffa3c", hover: "#e6e032" }, // Loud Yellow
+            { primary: "#1d3557", hover: "#162849" }, // Navy Stone
+            { primary: "#06b6d4", hover: "#0891b2" }, // Bold Cyan
+          ],
+          soft: [
+            { primary: "#6366f1", hover: "#4f46e5" },
+            { primary: "#ec4899", hover: "#db2777" },
+            { primary: "#10b981", hover: "#059669" },
+            { primary: "#f97316", hover: "#ea580c" }, // Orange
+            { primary: "#0ea5e9", hover: "#0284c7" }, // Sky blue
+            { primary: "#9333ea", hover: "#7e22ce" }, // Purple
+            { primary: "#f472b6", hover: "#ec4899" }, // Soft Pink
+            { primary: "#60a5fa", hover: "#3b82f6" }, // Baby Blue
+            { primary: "#a5b4fc", hover: "#818cf8" }, // Lavender Mist
+            { primary: "#fbbf24", hover: "#f59e0b" }, // Buttery Yellow
+            { primary: "#34d399", hover: "#10b981" }, // Mint Green
+            { primary: "#fcd34d", hover: "#facc15" }, // Banana Cream
+            { primary: "#c084fc", hover: "#a855f7" }, // Lilac Pop
+            { primary: "#67e8f9", hover: "#22d3ee" }, // Soft Cyan
+            { primary: "#fb7185", hover: "#f43f5e" }, // Blush Red
+            { primary: "#a3e635", hover: "#84cc16" }, // Lime Pastel
+            { primary: "#fde68a", hover: "#fcd34d" }, // Soft Yellow
+            { primary: "#a7f3d0", hover: "#6ee7b7" }, // Light Mint
+            { primary: "#fca5a5", hover: "#f87171" }, // Watermelon Pink
+            { primary: "#d8b4fe", hover: "#c084fc" }, // Dreamy Purple
+            { primary: "#bfdbfe", hover: "#93c5fd" }, // Cloud Blue
+            { primary: "#f9a8d4", hover: "#f472b6" }, // Cotton Candy
+            { primary: "#fcd5ce", hover: "#f8b4a3" }, // Peach Blush
+            { primary: "#bbf7d0", hover: "#86efac" }, // Calm Green
+            { primary: "#fecdd3", hover: "#fda4af" }, // Rose Quartz
+            { primary: "#e0f2fe", hover: "#bae6fd" }, // Ice Blue
+          ],
+          "3d": [
+            { primary: "#2563eb", dark: "#1d4ed8", darker: "#1e40af" },
+            { primary: "#dc2626", dark: "#b91c1c", darker: "#991b1b" },
+            { primary: "#059669", dark: "#047857", darker: "#065f46" },
+            { primary: "#f97316", dark: "#ea580c", darker: "#c2410c" }, // Orange
+            { primary: "#8b5cf6", dark: "#7c3aed", darker: "#6d28d9" }, // Purple
+            { primary: "#0ea5e9", dark: "#0284c7", darker: "#0369a1" }, // Sky blue
+            { primary: "#f43f5e", dark: "#e11d48", darker: "#be123c" }, // Rose Red
+            { primary: "#22c55e", dark: "#16a34a", darker: "#15803d" }, // Emerald Green
+            { primary: "#eab308", dark: "#ca8a04", darker: "#a16207" }, // Gold/Yellow
+            { primary: "#a855f7", dark: "#9333ea", darker: "#7e22ce" }, // Bright Purple
+            { primary: "#3b82f6", dark: "#2563eb", darker: "#1d4ed8" }, // Crisp Blue
+            { primary: "#facc15", dark: "#eab308", darker: "#ca8a04" }, // Yellow Sun
+            { primary: "#10b981", dark: "#059669", darker: "#047857" }, // Teal Green
+            { primary: "#fb923c", dark: "#f97316", darker: "#ea580c" }, // Warm Orange
+            { primary: "#ec4899", dark: "#db2777", darker: "#be185d" }, // Pink Vibe
+            { primary: "#7dd3fc", dark: "#38bdf8", darker: "#0ea5e9" }, // Soft Blue Glow
+          ],
+          neon: [
+            { primary: "#ff00ff", hover: "#ff33ff" }, // magenta
+            { primary: "#00ffff", hover: "#33ffff" }, // cyan
+            { primary: "#ff3131", hover: "#ff5252" }, // red
+            { primary: "#39ff14", hover: "#66ff44" }, // green
+            { primary: "#4da6ff", hover: "#66b3ff" }, // blue
+            { primary: "#ffe019", hover: "#fff44d" }, // yellow
+            { primary: "#ff6ec7", hover: "#ff85d3" }, // Neon Pink
+            { primary: "#00ffcc", hover: "#33ffd9" }, // Aqua Mint
+            { primary: "#ff5e00", hover: "#ff7733" }, // Burning Orange
+            { primary: "#7fff00", hover: "#99ff33" }, // Acid Lime
+            { primary: "#00ff99", hover: "#33ffb3" }, // Electric Teal
+            { primary: "#cc00ff", hover: "#d633ff" }, // Ultra Violet
+            { primary: "#ff1493", hover: "#ff4da6" }, // Deep Pink
+            { primary: "#00bfff", hover: "#33ccff" }, // Bright Sky
+            { primary: "#ffff33", hover: "#ffff66" }, // Highlighter Yellow
+            { primary: "#ff3300", hover: "#ff5c33" }, // Hot Lava Red
+          ],
+          animated: [
+            { primary: "#4f46e5", highlight: "#6366f1", lowlight: "#3730a3" },
+            { primary: "#0ea5e9", highlight: "#38bdf8", lowlight: "#0284c7" },
+            { primary: "#ef4444", highlight: "#f87171", lowlight: "#dc2626" },
+            { primary: "#10b981", highlight: "#34d399", lowlight: "#059669" }, // Green
+            { primary: "#f97316", highlight: "#fb923c", lowlight: "#ea580c" }, // Orange
+            { primary: "#8b5cf6", highlight: "#a78bfa", lowlight: "#7c3aed" }, // Purple
+            { primary: "#ec4899", highlight: "#f472b6", lowlight: "#db2777" }, // Rose Pink
+            { primary: "#22c55e", highlight: "#4ade80", lowlight: "#16a34a" }, // Emerald Green
+            { primary: "#f59e0b", highlight: "#fbbf24", lowlight: "#d97706" }, // Golden Amber
+            { primary: "#06b6d4", highlight: "#67e8f9", lowlight: "#0891b2" }, // Cool Cyan
+            { primary: "#c084fc", highlight: "#d8b4fe", lowlight: "#a855f7" }, // Lilac Glow
+            { primary: "#e11d48", highlight: "#fb7185", lowlight: "#be123c" }, // Bold Red
+            { primary: "#7dd3fc", highlight: "#bae6fd", lowlight: "#38bdf8" }, // Chill Blue
+            { primary: "#facc15", highlight: "#fde047", lowlight: "#ca8a04" }, // Banana Yellow
+            { primary: "#4ade80", highlight: "#bbf7d0", lowlight: "#16a34a" }, // Minty Fresh
+            { primary: "#9333ea", highlight: "#c084fc", lowlight: "#7e22ce" }, // Royal Purple
+          ],
+        };
+
+        // Initialize UI
+        initializeUI();
+
+        // Set initial theme
+        if (isDarkMode) {
+          document.body.classList.add("dark-mode");
+          themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        // Event Listeners
+        themeToggle.addEventListener("click", toggleTheme);
+        generateBtn.addEventListener("click", generateButton);
+        undoBtn.addEventListener("click", undoButtonGeneration);
+        redoBtn.addEventListener("click", redoButtonGeneration);
+        copyCodeBtn.addEventListener("click", copyCodeToClipboard);
+
+        // Style button event listeners
+        styleButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            // Remove active class from all style buttons
+            styleButtons.forEach((btn) => btn.classList.remove("active"));
+            // Add active class to clicked button
+            button.classList.add("active");
+            // Update active style
+            activeButtonStyle = button.dataset.style;
+            // Generate new button with selected style
+            generateButton();
+          });
+        });
+
+        // Tab buttons event listeners
+        tabButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            // Remove active class from all tab buttons
+            tabButtons.forEach((btn) => btn.classList.remove("active"));
+            // Add active class to clicked button
+            button.classList.add("active");
+            // Update displayed code
+            currentTab = button.dataset.tab;
+            updateCodeSnippet(currentTab);
+          });
+        });
+
+        // Initialize UI function
+        function initializeUI() {
+          // Initialize highlight.js
+          hljs.highlightAll();
+
+          // Generate initial button
+          generateButton();
+        }
+
+        // Toggle Theme function
+        function toggleTheme() {
+          isDarkMode = !isDarkMode;
+          document.body.classList.toggle("dark-mode", isDarkMode);
+          themeToggle.innerHTML = isDarkMode
+            ? '<i class="fas fa-sun"></i>'
+            : '<i class="fas fa-moon"></i>';
+          localStorage.setItem("darkMode", isDarkMode);
+        }
+
+        // Update history buttons state
+        function updateHistoryButtons() {
+          undoBtn.disabled = currentHistoryIndex <= 0;
+          redoBtn.disabled = redoHistory.length === 0;
+        }
+
+        // Generate Button function
+        function generateButton() {
+          // Create a button style based on selected type
+          const buttonStyle = createButtonStyle(activeButtonStyle);
+
+          // Add to history and reset redo history
+          if (currentHistoryIndex >= 0) {
+            // Trim history if we're not at the end
+            buttonStyleHistory = buttonStyleHistory.slice(
+              0,
+              currentHistoryIndex + 1
+            );
+          }
+
+          buttonStyleHistory.push(buttonStyle);
+          currentHistoryIndex = buttonStyleHistory.length - 1;
+          redoHistory = [];
+
+          // Update history controls
+          updateHistoryButtons();
+
+          // Apply the button style
+          applyButtonStyle(buttonStyle);
+
+          // Update button history display
+          updateButtonHistory();
+
+          // Update code snippets
+          updateAllCodeSnippets(buttonStyle);
+        }
+
+        // Undo function
+        function undoButtonGeneration() {
+          if (currentHistoryIndex > 0) {
+            // Move current button to redo history
+            redoHistory.push(buttonStyleHistory[currentHistoryIndex]);
+
+            // Go back one step in history
+            currentHistoryIndex--;
+
+            // Apply the previous button style
+            applyButtonStyle(buttonStyleHistory[currentHistoryIndex]);
+
+            // Update buttons and history display
+            updateHistoryButtons();
+            updateButtonHistory();
+
+            // Update code snippets
+            updateAllCodeSnippets(buttonStyleHistory[currentHistoryIndex]);
+          }
+        }
+
+        // Redo function
+        function redoButtonGeneration() {
+          if (redoHistory.length > 0) {
+            // Get the last redone button
+            const redoneButton = redoHistory.pop();
+
+            // Increment history index and add button back to history
+            currentHistoryIndex++;
+            buttonStyleHistory[currentHistoryIndex] = redoneButton;
+
+            // Apply the redone button style
+            applyButtonStyle(redoneButton);
+
+            // Update buttons and history display
+            updateHistoryButtons();
+            updateButtonHistory();
+
+            // Update code snippets
+            updateAllCodeSnippets(redoneButton);
+          }
+        }
+
+        // Create button style based on selected type
+        function createButtonStyle(styleType) {
+          // Get style-specific color palette
+          const styleColorOptions =
+            styleColorPalettes[styleType] || styleColorPalettes.minimal;
+          const colorPalette = getRandomItem(styleColorOptions);
+
+          // Consistent styling fundamentals
+          const randomFont = getRandomItem(fonts);
+          const fontSize = getRandomBetween(14, 18);
+          const buttonText = getRandomItem(buttonTextOptions);
+
+          // Always include an icon for consistency
+          const iconPosition = Math.random() > 0.5 ? "left" : "right";
+          const icon = `<i class="${getRandomItem(icons)}"></i>`;
+
+          const iconHTML =
+            iconPosition === "left"
+              ? `<span style="margin-right: 8px;">${icon}</span>`
+              : `<span style="margin-left: 8px;">${icon}</span>`;
+
+          // Base properties that all button styles will have
+          const baseProps = {
+            fontFamily: randomFont,
+            fontSize: `${fontSize}px`,
+            text: buttonText,
+            iconHTML: iconHTML,
+            paddingV: getRandomBetween(12, 16), // More consistent padding
+            paddingH: getRandomBetween(24, 32), // More consistent padding
+            minWidth: getRandomBetween(140, 180), // Slightly wider for better proportions
+          };
+
+          // Style-specific properties
+          let styleProps = {};
+
+          switch (styleType) {
+            case "minimal":
+              styleProps = createMinimalStyle(colorPalette);
+              break;
+            case "gradient":
+              styleProps = createGradientStyle(colorPalette);
+              break;
+            case "glass":
+              styleProps = createGlassStyle(colorPalette);
+              break;
+            case "neobrutalism":
+              styleProps = createNeobrutalismStyle(colorPalette);
+              break;
+            case "soft":
+              styleProps = createSoftStyle(colorPalette);
+              break;
+            case "3d":
+              styleProps = create3DStyle(colorPalette);
+              break;
+            case "neon":
+              styleProps = createNeonStyle(colorPalette);
+              break;
+            case "animated":
+              styleProps = createAnimatedStyle(colorPalette);
+              break;
+            default:
+              styleProps = createMinimalStyle(colorPalette);
+          }
+
+          // Combine base properties with style-specific properties
+          return { ...baseProps, ...styleProps, styleType };
+        }
+
+        // Create minimal button style - Clean, flat, modern
+        function createMinimalStyle(colorPalette) {
+          const borderRadius = getRandomBetween(6, 10); // More consistent corner radius
+
+          return {
+            backgroundColor: colorPalette.primary,
+            color: "#ffffff",
+            borderRadius: `${borderRadius}px`,
+            border: "none",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            hoverBgColor: colorPalette.hover,
+            hoverTransform: "translateY(-2px) scale(1.03)",
+            hoverBoxShadow: "0 8px 15px rgba(0, 0, 0, 0.2)",
+            transitionDuration: "0.2s",
+            // Added subtle text shadow for better contrast
+            textShadow: "0 1px 1px rgba(0, 0, 0, 0.1)",
+          };
+        }
+
+        // Create gradient button style - Vibrant, eye-catching
+        function createGradientStyle(colorPalette) {
+          const borderRadius = getRandomBetween(8, 12); // More consistent corner radius
+          const gradientDegree = getRandomBetween(45, 135); // Limited angles for better appearance
+
+          // Create a more consistent gradient
+          const gradient = `linear-gradient(${gradientDegree}deg, ${colorPalette.secondaryDark}, ${colorPalette.primary}, ${colorPalette.secondaryLight})`;
+
+          return {
+            background: gradient,
+            backgroundSize: "200% 200%",
+            color: "#ffffff",
+            borderRadius: `${borderRadius}px`,
+            border: "none",
+            boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+            hoverTransform: "translateY(-3px) scale(1.02)",
+            hoverBoxShadow: "0 10px 25px rgba(0, 0, 0, 0.25)",
+            hoverBackgroundPosition: "right center",
+            transitionDuration: "0.4s",
+            // Added text shadow for better text visibility
+            textShadow: "0 1px 3px rgba(0, 0, 0, 0.2)",
+            // Added slight letter spacing
+            letterSpacing: "0.5px",
+          };
+        }
+
+        // Create glass button style - Elegant, translucent
+        function createGlassStyle(colorPalette) {
+          const borderRadius = getRandomBetween(12, 20); // Smoother corners for glass effect
+          const colorWithAlpha = hexToRgba(colorPalette.primary, 0.2);
+          const textColor = isDarkMode ? "#ffffff" : colorPalette.primary;
+
+          return {
+            backgroundColor: colorWithAlpha,
+            color: textColor,
+            borderRadius: `${borderRadius}px`,
+            backdropFilter: "blur(10px)",
+            border: `1px solid ${colorPalette.borderColor}`,
+            boxShadow: `0 4px 15px ${hexToRgba(colorPalette.primary, 0.1)}`,
+            textShadow: isDarkMode ? "0 1px 3px rgba(0, 0, 0, 0.3)" : "none",
+            hoverBgColor: hexToRgba(colorPalette.primary, 0.3),
+            hoverBorderColor: hexToRgba(colorPalette.primary, 0.7),
+            hoverBoxShadow: `0 8px 25px ${hexToRgba(
+              colorPalette.primary,
+              0.3
+            )}`,
+            hoverTransform: "translateY(-2px) scale(1.02)",
+            transitionDuration: "0.3s",
+            // Enhanced glow effect
+            customBorder: `
+          &:before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            z-index: -1;
+            background: ${hexToRgba(colorPalette.primary, 0.1)};
+            border-radius: ${parseInt(borderRadius) + 4}px;
+            filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+          
+          &:hover:before {
+            opacity: 1;
+          }
+        `,
+          };
+        }
+
+        // Create neobrutalism button style - Bold, geometric
+        function createNeobrutalismStyle(colorPalette) {
+          const borderRadius = getRandomBetween(0, 4);
+          const offsetX = 5;
+          const offsetY = 5;
+
+          return {
+            backgroundColor: colorPalette.primary,
+            color: "#ffffff",
+            borderRadius: `${borderRadius}px`,
+            border: `2px solid #000000`,
+            boxShadow: `${offsetX}px ${offsetY}px 0 0 #000000`,
+            hoverTransform: "translate(-3px, -3px)",
+            hoverBoxShadow: `${offsetX + 3}px ${offsetY + 3}px 0 0 #000000`,
+            transitionDuration: "0.15s",
+            // Added bold text
+            fontWeight: "bold",
+            // Added letter spacing
+            letterSpacing: "1px",
+            // Add hover effect for background color
+            hoverBgColor: colorPalette.hover,
+          };
+        }
+
+        // Create soft button style - Gentle, neumorphic
+        function createSoftStyle(colorPalette) {
+          const borderRadius = getRandomBetween(12, 20);
+
+          // Softer pastel palette for this style
+          const bgColor = lightenColor(colorPalette.primary, 0.85);
+          const textColor = colorPalette.primary;
+          const lightColorMid = lightenColor(colorPalette.primary, 0.6);
+
+          return {
+            backgroundColor: bgColor,
+            color: textColor,
+            borderRadius: `${borderRadius}px`,
+            border: "none",
+            boxShadow: `
+          inset 2px 2px 5px ${lightColorMid},
+          inset -2px -2px 5px #ffffff,
+          2px 2px 5px rgba(0, 0, 0, 0.05)
+        `,
+            hoverBgColor: lightenColor(colorPalette.primary, 0.9),
+            hoverBoxShadow: `
+          inset 1px 1px 2px ${lightColorMid},
+          inset -1px -1px 2px #ffffff,
+          4px 4px 10px rgba(0, 0, 0, 0.1)
+        `,
+            hoverTransform: "scale(1.03)",
+            hoverColor: colorPalette.hover,
+            transitionDuration: "0.3s",
+            // Added subtle font weight
+            fontWeight: "500",
+            // Added subtle letter spacing
+            letterSpacing: "0.3px",
+          };
+        }
+
+        // Create 3D button style - Dimensional, tactile
+        function create3DStyle(colorPalette) {
+          const borderRadius = getRandomBetween(6, 10);
+          const darkColor = colorPalette.dark;
+          const darkerColor = colorPalette.darker;
+          const highlightColor = adjustColor(colorPalette.primary, 20);
+
+          return {
+            backgroundColor: colorPalette.primary,
+            color: "#ffffff",
+            borderRadius: `${borderRadius}px`,
+            border: "none",
+            boxShadow: `
+          0 6px 0 ${darkColor},
+          0 8px 10px rgba(0, 0, 0, 0.2)
+        `,
+            hoverTransform: "translateY(2px)",
+            hoverBoxShadow: `
+          0 4px 0 ${darkColor},
+          0 5px 8px rgba(0, 0, 0, 0.2)
+        `,
+            hoverBgColor: adjustColor(colorPalette.primary, 10),
+            activeBgColor: darkColor,
+            activeTransform: "translateY(4px)",
+            activeBoxShadow: `
+          0 2px 0 ${darkerColor},
+          0 3px 6px rgba(0, 0, 0, 0.2)
+        `,
+            transitionDuration: "0.1s",
+            // Enhanced highlight top edge
+            textShadow: "0 1px 1px rgba(0, 0, 0, 0.3)",
+            customBorder: `
+          &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 3px;
+            background-color: ${highlightColor};
+            border-top-left-radius: ${borderRadius}px;
+            border-top-right-radius: ${borderRadius}px;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+          }
+          
+          &:hover:before {
+            opacity: 1;
+          }
+        `,
+          };
+        }
+
+        // Create neon button style - Glowing, futuristic
+        function createNeonStyle(colorPalette) {
+          const borderRadius = getRandomBetween(4, 8);
+          const glowColor = hexToRgba(colorPalette.primary, 0.7);
+          const darkBg = "#111111";
+
+          return {
+            backgroundColor: "transparent",
+            color: colorPalette.primary,
+            borderRadius: `${borderRadius}px`,
+            border: `2px solid ${colorPalette.primary}`,
+            boxShadow: `
+          0 0 10px ${glowColor},
+          inset 0 0 8px ${glowColor}
+        `,
+            textShadow: `0 0 8px ${glowColor}`,
+            hoverColor: darkBg,
+            hoverBgColor: colorPalette.primary,
+            hoverBoxShadow: `
+          0 0 20px ${glowColor},
+          0 0 30px ${glowColor},
+          inset 0 0 10px #ffffff
+        `,
+            hoverTextShadow: "none",
+            hoverTransform: "translateY(-3px) scale(1.05)",
+            transitionDuration: "0.3s",
+            // Added letter spacing for futuristic look
+            letterSpacing: "1.5px",
+            // Added font weight
+            fontWeight: "600",
+            // Added text transform for all caps
+            textTransform: "uppercase",
+            // Enhanced custom animation
+            customAnimation: `
+          &:after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            border-radius: ${parseInt(borderRadius) + 2}px;
+            background: transparent;
+            border: 2px solid transparent;
+            box-shadow: 0 0 0 2px ${hexToRgba(colorPalette.primary, 0)};
+            transition: all 0.3s ease;
+          }
+          
+          &:hover:after {
+            box-shadow: 0 0 15px 3px ${hexToRgba(colorPalette.primary, 0.4)};
+          }
+        `,
+          };
+        }
+
+        // Create animated button style - Dynamic, playful
+        function createAnimatedStyle(colorPalette) {
+          // Expanded animation options for more variety
+          const animationOptions = [
+            'pulse', 'shimmer', 'ripple', 'border-dance', 'float', 'bounce'
+          ];
+          
+          // Select a random animation from the expanded list
+          const selectedAnimation = getRandomItem(animationOptions);
+          
+          const borderRadius = getRandomBetween(8, 12);
+          
+          // Base style properties
+          const baseStyle = {
+            backgroundColor: colorPalette.primary,
+            color: '#ffffff',
+            borderRadius: `${borderRadius}px`,
+            border: 'none',
+            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+            hoverTransform: 'translateY(-3px) scale(1.03)',
+            hoverBoxShadow: '0 8px 25px rgba(0, 0, 0, 0.15)',
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
+            letterSpacing: '0.5px',
+            fontWeight: '600',
+            transitionDuration: '0.3s'
+          };
+          
+          let animationCSS = {};
+          
+          switch (selectedAnimation) {
+            case 'pulse':
+              animationCSS = {
+                animation: 'pulse 1.5s infinite ease-in-out',
+                hoverAnimation: 'pulse 1s infinite ease-in-out',
+                hoverBgColor: colorPalette.highlight
+              };
+              break;
+            case 'shimmer':
+              animationCSS = {
+                background: `linear-gradient(90deg, ${colorPalette.primary}, ${colorPalette.highlight}, ${colorPalette.primary})`,
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 2.5s infinite ease-in-out',
+                hoverBackgroundSize: '150% 100%'
+              };
+              break;
+            case 'ripple':
+              animationCSS = {
+                position: 'relative',
+                overflow: 'hidden',
+                customAnimation: `
+                  &:after {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 10px;
+                    height: 10px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 1.5s infinite;
+                    z-index: 0;
+                  }
+                  
+                  &:hover:after {
+                    animation: ripple 0.8s infinite;
+                    background: rgba(255, 255, 255, 0.5);
+                  }
+                  
+                  &:hover {
+                    background-color: ${colorPalette.highlight};
+                  }
+                `
+              };
+              break;
+            case 'border-dance':
+              animationCSS = {
+                position: 'relative',
+                background: colorPalette.primary,
+                customBorder: `
+                  &:before {
+                    content: '';
+                    position: absolute;
+                    top: -5px;
+                    left: -5px;
+                    right: -5px;
+                    bottom: -5px;
+                    z-index: -1;
+                    background: linear-gradient(
+                      45deg, 
+                      ${colorPalette.primary}, 
+                      ${colorPalette.highlight}, 
+                      ${colorPalette.lowlight}, 
+                      ${colorPalette.primary}
+                    );
+                    background-size: 400% 400%;
+                    animation: border-dance 3s ease infinite;
+                    border-radius: ${borderRadius + 5}px;
+                  }
+                  
+                  &:hover:before {
+                    animation: border-dance 1.5s ease infinite;
+                    filter: brightness(1.2);
+                  }
+                  
+                  &:hover {
+                    background-color: ${colorPalette.highlight};
+                  }
+                `
+              };
+              break;
+            case 'float':
+              animationCSS = {
+                animation: 'float 3s infinite ease-in-out',
+                customAnimation: `
+                  &:hover {
+                    animation: float 1.5s infinite ease-in-out;
+                    background-color: ${colorPalette.highlight};
+                  }
+                `
+              };
+              break;
+            case 'bounce':
+              animationCSS = {
+                customAnimation: `
+                  &:hover {
+                    animation: bounce 0.8s ease infinite;
+                    background-color: ${colorPalette.highlight};
+                  }
+                `
+              };
+              break;
+          }
+          
+          return {
+            ...baseStyle,
+            ...animationCSS,
+            animationType: selectedAnimation,
+          };
+        }
+
+        // Apply button style to preview
+        function applyButtonStyle(style) {
+          // Clean up any previous style elements before applying new ones
+          const oldStyleTags = document.querySelectorAll('.dynamic-button-style');
+          oldStyleTags.forEach(tag => tag.remove());
+          
+          let buttonHTML = `
+            <button class="generated-button" id="previewButton" style="
+              font-family: '${style.fontFamily}', sans-serif;
+              font-size: ${style.fontSize};
+              background: ${style.background || style.backgroundColor || 'transparent'};
+              color: ${style.color};
+              padding: ${style.paddingV}px ${style.paddingH}px;
+              border-radius: ${style.borderRadius};
+              border: ${style.border || 'none'};
+              box-shadow: ${style.boxShadow || 'none'};
+              min-width: ${style.minWidth}px;
+              position: relative;
+              ${style.backdropFilter ? `backdrop-filter: ${style.backdropFilter};` : ''}
+              ${style.textShadow ? `text-shadow: ${style.textShadow};` : ''}
+              ${style.backgroundSize ? `background-size: ${style.backgroundSize};` : ''}
+              ${style.animation ? `animation: ${style.animation};` : ''}
+              ${style.fontWeight ? `font-weight: ${style.fontWeight};` : ''}
+              ${style.letterSpacing ? `letter-spacing: ${style.letterSpacing};` : ''}
+              ${style.textTransform ? `text-transform: ${style.textTransform};` : ''}
+              transform-origin: center;
+              isolation: isolate;
+            ">
+              ${style.iconHTML || ''}${style.text}${style.iconHTML ? '' : ''}
+            </button>
+          `;
+          
+          buttonPreview.innerHTML = buttonHTML;
+          
+          // Add event listeners for hover and active states
+          const previewButton = document.getElementById('previewButton');
+          
+          // Apply custom border or animation effects if needed
+          if (style.customBorder || style.customAnimation) {
+            const styleTag = document.createElement('style');
+            styleTag.className = 'dynamic-button-style';
+            let customCSS = '';
+            
+            if (style.customBorder) {
+              customCSS += `
+                #previewButton:before {
+                  ${style.customBorder.replace(/&:before\s*{([^}]*)}/g, '$1')}
+                  pointer-events: none;
+                }
+              `;
+            }
+            
+            if (style.customAnimation) {
+              customCSS += `
+                ${style.customAnimation.replace(/&:after\s*{([^}]*)}/g, '#previewButton:after {$1 pointer-events: none;}')}
+                ${style.customAnimation.replace(/&:hover:after\s*{([^}]*)}/g, '#previewButton:hover:after {$1}')}
+                ${style.customAnimation.replace(/&:hover\s*{([^}]*)}/g, '#previewButton:hover {$1}')}
+              `;
+            }
+            
+            // Add animation keyframes if needed for this specific style
+            if (style.animationType) {
+              // Ensure keyframes are scoped with unique names to avoid conflicts
+              const uniqueId = Date.now().toString(36);
+              
+              switch(style.animationType) {
+                case 'pulse':
+                  customCSS += `
+                    @keyframes pulse-${uniqueId} {
+                      0% { transform: scale(1); }
+                      50% { transform: scale(1.03); }
+                      100% { transform: scale(1); }
+                    }
+                    
+                    #previewButton {
+                      animation: pulse-${uniqueId} 1.5s infinite ease-in-out;
+                    }
+                    
+                    #previewButton:hover {
+                      animation: pulse-${uniqueId} 1s infinite ease-in-out;
+                    }
+                  `;
+                  break;
+                case 'float':
+                  customCSS += `
+                    @keyframes float-${uniqueId} {
+                      0% { transform: translateY(0); }
+                      50% { transform: translateY(-6px); }
+                      100% { transform: translateY(0); }
+                    }
+                    
+                    #previewButton {
+                      animation: float-${uniqueId} 3s infinite ease-in-out;
+                    }
+                    
+                    #previewButton:hover {
+                      animation: float-${uniqueId} 1.5s infinite ease-in-out;
+                    }
+                  `;
+                  break;
+                case 'shimmer':
+                  // For shimmer, we only need to adjust the background, which is handled by inline style
+                  break;
+                case 'bounce':
+                  customCSS += `
+                    @keyframes bounce-${uniqueId} {
+                      0%, 100% { transform: translateY(0); }
+                      50% { transform: translateY(-10px); }
+                    }
+                    
+                    #previewButton:hover {
+                      animation: bounce-${uniqueId} 0.8s ease infinite;
+                    }
+                  `;
+                  break;
+                // Other animation cases can be added here
+              }
+            }
+            
+            styleTag.textContent = customCSS;
+            document.head.appendChild(styleTag);
+          }
+          
+          previewButton.addEventListener('mouseenter', () => {
+            // Prevent animation from affecting parent elements
+            previewButton.style.isolation = 'isolate';
+            previewButton.style.transformOrigin = 'center';
+            
+            previewButton.style.transform = style.hoverTransform || '';
+            previewButton.style.backgroundColor = style.hoverBgColor || '';
+            previewButton.style.color = style.hoverColor || '';
+            previewButton.style.boxShadow = style.hoverBoxShadow || '';
+            previewButton.style.borderColor = style.hoverBorderColor || '';
+            previewButton.style.textShadow = style.hoverTextShadow || '';
+            
+            if (style.hoverBackgroundPosition) {
+              previewButton.style.backgroundPosition = style.hoverBackgroundPosition;
+            }
+            
+            if (style.hoverAnimation) {
+              previewButton.style.animation = style.hoverAnimation;
+            }
+          });
+          
+          previewButton.addEventListener('mouseleave', () => {
+            previewButton.style.transform = '';
+            previewButton.style.backgroundColor = style.backgroundColor || '';
+            previewButton.style.color = style.color || '';
+            previewButton.style.boxShadow = style.boxShadow || '';
+            previewButton.style.borderColor = style.borderColor || '';
+            previewButton.style.textShadow = style.textShadow || '';
+            
+            if (style.hoverBackgroundPosition) {
+              previewButton.style.backgroundPosition = '';
+            }
+            
+            if (style.hoverAnimation) {
+              previewButton.style.animation = style.animation || '';
+            }
+          });
+          
+          previewButton.addEventListener('mousedown', () => {
+            if (style.activeTransform) previewButton.style.transform = style.activeTransform;
+            if (style.activeBgColor) previewButton.style.backgroundColor = style.activeBgColor;
+            if (style.activeBoxShadow) previewButton.style.boxShadow = style.activeBoxShadow;
+          });
+          
+          previewButton.addEventListener('mouseup', () => {
+            previewButton.style.transform = style.hoverTransform || '';
+            previewButton.style.backgroundColor = style.hoverBgColor || '';
+            previewButton.style.boxShadow = style.hoverBoxShadow || '';
+          });
+        }
+
+        // Update all code snippets (HTML, CSS, React)
+        function updateAllCodeSnippets(style) {
+          // Generate code for all tabs
+          const htmlCodeText = generateHTMLCode(style);
+          const cssCodeText = generateCSSCode(style);
+          const reactCodeText = generateReactCode(style);
+
+          // Store in state for tab switching
+          style.htmlCode = htmlCodeText;
+          style.cssCode = cssCodeText;
+          style.reactCode = reactCodeText;
+
+          // Update current visible tab
+          updateCodeSnippet(currentTab);
+        }
+
+        // Update the displayed code snippet based on selected tab
+        function updateCodeSnippet(tabName) {
+          const style = buttonStyleHistory[currentHistoryIndex];
+          if (!style) return;
+
+          let codeContent;
+          let language;
+
+          switch (tabName) {
+            case "html":
+              codeContent = style.htmlCode;
+              language = "html";
+              break;
+            case "css":
+              codeContent = style.cssCode;
+              language = "css";
+              break;
+            case "react":
+              codeContent = style.reactCode;
+              language = "jsx";
+              break;
+            default:
+              codeContent = style.htmlCode;
+              language = "html";
+          }
+
+          // Update code display
+          snippetContent.innerHTML = `<pre><code class="language-${language}">${escapeHTML(
+            codeContent
+          )}</code></pre>`;
+
+          // Highlight new code
+          hljs.highlightAll();
+        }
+
+        // Generate HTML code
+        function generateHTMLCode(style) {
+          return `<!-- Premium Button -->
+  <button class="premium-button ${style.styleType}-button">
+    ${style.iconHTML || ""}${style.text}${style.iconHTML ? "" : ""}
+  </button>`;
+        }
+
+        // Generate CSS code
+        function generateCSSCode(style) {
+          // Base button CSS
+          let css = `.premium-button {
+    font-family: '${style.fontFamily}', sans-serif;
+    font-size: ${style.fontSize};
+    padding: ${style.paddingV}px ${style.paddingH}px;
+    min-width: ${style.minWidth}px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all ${style.transitionDuration || "0.3s"} ease;
+    white-space: nowrap;
+    user-select: none;
+  }
+  
+  .${style.styleType}-button {
+    background: ${style.background || style.backgroundColor || "transparent"};
+    color: ${style.color};
+    border-radius: ${style.borderRadius};
+    border: ${style.border || "none"};
+    box-shadow: ${style.boxShadow || "none"};`;
+
+          // Add conditional properties
+          if (style.backdropFilter) {
+            css += `\n  backdrop-filter: ${style.backdropFilter};`;
+          }
+
+          if (style.textShadow) {
+            css += `\n  text-shadow: ${style.textShadow};`;
+          }
+
+          if (style.backgroundSize) {
+            css += `\n  background-size: ${style.backgroundSize};`;
+          }
+
+          if (style.animation) {
+            css += `\n  animation: ${style.animation};`;
+          }
+
+          // Close main style
+          css += "\n}\n\n";
+
+          // Add hover state
+          css += `.${style.styleType}-button:hover {`;
+
+          if (style.hoverTransform) {
+            css += `\n  transform: ${style.hoverTransform};`;
+          }
+
+          if (style.hoverBgColor) {
+            css += `\n  background-color: ${style.hoverBgColor};`;
+          }
+
+          if (style.hoverColor) {
+            css += `\n  color: ${style.hoverColor};`;
+          }
+
+          if (style.hoverBoxShadow) {
+            css += `\n  box-shadow: ${style.hoverBoxShadow};`;
+          }
+
+          if (style.hoverBorderColor) {
+            css += `\n  border-color: ${style.hoverBorderColor};`;
+          }
+
+          if (style.hoverTextShadow) {
+            css += `\n  text-shadow: ${style.hoverTextShadow};`;
+          }
+
+          if (style.hoverBackgroundPosition) {
+            css += `\n  background-position: ${style.hoverBackgroundPosition};`;
+          }
+
+          css += "\n}\n\n";
+
+          // Add active state if needed
+          if (
+            style.activeTransform ||
+            style.activeBgColor ||
+            style.activeBoxShadow
+          ) {
+            css += `.${style.styleType}-button:active {`;
+
+            if (style.activeTransform) {
+              css += `\n  transform: ${style.activeTransform};`;
+            }
+
+            if (style.activeBgColor) {
+              css += `\n  background-color: ${style.activeBgColor};`;
+            }
+
+            if (style.activeBoxShadow) {
+              css += `\n  box-shadow: ${style.activeBoxShadow};`;
+            }
+
+            css += "\n}\n\n";
+          }
+
+          // Add animations if needed
+          if (style.animationType) {
+            switch (style.animationType) {
+              case "pulse":
+                css += `@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}`;
+                break;
+              case "float":
+                css += `@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}`;
+                break;
+              case "shimmer":
+                css += `@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}`;
+                break;
+              case "ripple":
+                css += `@keyframes ripple {
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3); }
+  100% { box-shadow: 0 0 0 16px rgba(255, 255, 255, 0); }
+}`;
+                break;
+              case "shake":
+                css += `@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-2px); }
+  40%, 80% { transform: translateX(2px); }
+}`;
+                break;
+              case "bounce":
+                css += `@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}`;
+                break;
+              case "jello":
+                css += `@keyframes jello {
+  0%, 11.1%, 100% { transform: skewX(0deg) skewY(0deg); }
+  22.2% { transform: skewX(-12.5deg) skewY(-12.5deg); }
+  33.3% { transform: skewX(6.25deg) skewY(6.25deg); }
+  44.4% { transform: skewX(-3.125deg) skewY(-3.125deg); }
+  55.5% { transform: skewX(1.5625deg) skewY(1.5625deg); }
+  66.6% { transform: skewX(-0.78125deg) skewY(-0.78125deg); }
+  77.7% { transform: skewX(0.390625deg) skewY(0.390625deg); }
+  88.8% { transform: skewX(-0.1953125deg) skewY(-0.1953125deg); }
+}`;
+                break;
+              case "border-dance":
+                css += `@keyframes border-dance {
+  0% { background-position: 0 0, 100% 0, 100% 100%, 0 100%; }
+  100% { background-position: 100% 0, 100% 100%, 0 100%, 0 0; }
+}`;
+                break;
+            }
+          }
+
+          // Add custom CSS for certain animations
+          if (style.customAnimation) {
+            css += `\n\n/* Custom animation */\n${style.customAnimation.replace(
+              /&/g,
+              `.${style.styleType}-button`
+            )}`;
+          }
+
+          if (style.customBorder) {
+            css += `\n\n/* Custom border */\n${style.customBorder.replace(
+              /&/g,
+              `.${style.styleType}-button`
+            )}`;
+          }
+
+          return css;
+        }
+
+        // Generate React component code
+        function generateReactCode(style) {
+          // Handle animations
+          let animationImport = "";
+          let animationCSS = "";
+
+          if (style.animationType) {
+            animationImport = "import { keyframes } from '@emotion/react';\n";
+
+            switch (style.animationType) {
+              case "pulse":
+                animationCSS = `const pulseAnimation = keyframes\`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+\`;`;
+                break;
+              case "float":
+                animationCSS = `const floatAnimation = keyframes\`
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+\`;`;
+                break;
+              case "shimmer":
+                animationCSS = `const shimmerAnimation = keyframes\`
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+\`;`;
+                break;
+              case "ripple":
+                animationCSS = `const rippleAnimation = keyframes\`
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3); }
+  100% { box-shadow: 0 0 0 16px rgba(255, 255, 255, 0); }
+\`;`;
+                break;
+              case "shake":
+                animationCSS = `const shakeAnimation = keyframes\`
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-2px); }
+  40%, 80% { transform: translateX(2px); }
+\`;`;
+                break;
+              case "bounce":
+                animationCSS = `const bounceAnimation = keyframes\`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+\`;`;
+                break;
+              case "jello":
+                animationCSS = `const jelloAnimation = keyframes\`
+  0%, 11.1%, 100% { transform: skewX(0deg) skewY(0deg); }
+  22.2% { transform: skewX(-12.5deg) skewY(-12.5deg); }
+  33.3% { transform: skewX(6.25deg) skewY(6.25deg); }
+  44.4% { transform: skewX(-3.125deg) skewY(-3.125deg); }
+  55.5% { transform: skewX(1.5625deg) skewY(1.5625deg); }
+  66.6% { transform: skewX(-0.78125deg) skewY(-0.78125deg); }
+  77.7% { transform: skewX(0.390625deg) skewY(0.390625deg); }
+  88.8% { transform: skewX(-0.1953125deg) skewY(-0.1953125deg); }
+\`;`;
+                break;
+              case "border-dance":
+                animationCSS = `const borderDanceAnimation = keyframes\`
+  0% { background-position: 0 0, 100% 0, 100% 100%, 0 100%; }
+  100% { background-position: 100% 0, 100% 100%, 0 100%, 0 0; }
+\`;`;
+                break;
+            }
+          }
+
+          // React component
+          return `import React from 'react';
+import styled from '@emotion/styled';
+${animationImport}
+
+${animationCSS ? animationCSS + "\n\n" : ""}const Button = styled.button\`
+  font-family: '${style.fontFamily}', sans-serif;
+  font-size: ${style.fontSize};
+  padding: ${style.paddingV}px ${style.paddingH}px;
+  min-width: ${style.minWidth}px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all ${style.transitionDuration || "0.3s"} ease;
+  white-space: nowrap;
+  user-select: none;
+  
+  background: ${style.background || style.backgroundColor || "transparent"};
+  color: ${style.color};
+  border-radius: ${style.borderRadius};
+  border: ${style.border || "none"};
+  box-shadow: ${style.boxShadow || "none"};
+  ${style.backdropFilter ? `backdrop-filter: ${style.backdropFilter};` : ""}
+  ${style.textShadow ? `text-shadow: ${style.textShadow};` : ""}
+  ${style.backgroundSize ? `background-size: ${style.backgroundSize};` : ""}
+  ${style.animation ? `animation: ${style.animation};` : ""}
+  
+  &:hover {
+    ${style.hoverTransform ? `transform: ${style.hoverTransform};` : ""}
+    ${style.hoverBgColor ? `background-color: ${style.hoverBgColor};` : ""}
+    ${style.hoverColor ? `color: ${style.hoverColor};` : ""}
+    ${style.hoverBoxShadow ? `box-shadow: ${style.hoverBoxShadow};` : ""}
+    ${style.hoverBorderColor ? `border-color: ${style.hoverBorderColor};` : ""}
+    ${style.hoverTextShadow ? `text-shadow: ${style.hoverTextShadow};` : ""}
+    ${
+      style.hoverBackgroundPosition
+        ? `background-position: ${style.hoverBackgroundPosition};`
+        : ""
+    }
+  }
+  
+  ${
+    style.activeTransform || style.activeBgColor || style.activeBoxShadow
+      ? `
+  &:active {
+    ${style.activeTransform ? `transform: ${style.activeTransform};` : ""}
+    ${style.activeBgColor ? `background-color: ${style.activeBgColor};` : ""}
+    ${style.activeBoxShadow ? `box-shadow: ${style.activeBoxShadow};` : ""}
+  }
+  `
+      : ""
+  }
+  
+  ${style.customAnimation ? style.customAnimation.replace(/&/g, "") : ""}
+  ${style.customBorder ? style.customBorder.replace(/&/g, "") : ""}
+\`;
+
+const PremiumButton = ({ children, ...props }) => {
+  return (
+    <Button {...props}>
+      ${
+        style.iconHTML
+          ? `<span style={{ marginRight: '8px' }}>${
+              style.iconHTML.includes("<i class=")
+                ? '{<i className="' +
+                  style.iconHTML.match(/class="([^"]+)"/)[1] +
+                  '" />}'
+                : style.iconHTML
+            }</span>`
+          : ""
+      }
+      {children || '${style.text}'}
+      ${
+        style.iconHTML && style.iconHTML.includes("margin-left")
+          ? `<span style={{ marginLeft: '8px' }}>${
+              style.iconHTML.includes("<i class=")
+                ? '{<i className="' +
+                  style.iconHTML.match(/class="([^"]+)"/)[1] +
+                  '" />}'
+                : style.iconHTML
+            }</span>`
+          : ""
+      }
+    </Button>
+  );
+};
+
+export default PremiumButton;`;
+        }
+
+        // Update button history display
+        function updateButtonHistory() {
+          // Clear history display
+          buttonHistory.innerHTML = "";
+
+          // Display up to 5 most recent buttons (excluding current)
+          const historyButtons = buttonStyleHistory
+            .slice(0, currentHistoryIndex)
+            .reverse()
+            .slice(0, 5);
+
+          if (historyButtons.length === 0) {
+            buttonHistory.innerHTML =
+              '<p class="empty-state">No recent buttons</p>';
+            return;
+          }
+
+          // Create history items
+          historyButtons.forEach((historicalStyle, index) => {
+            const historyItem = document.createElement("div");
+            historyItem.className = "history-item";
+            historyItem.style.cssText = `
+          padding: 10px;
+          margin-bottom: 10px;
+          border-radius: 8px;
+          border: 1px solid var(--border-color);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          transition: all 0.2s ease;
+        `;
+
+            // Create miniature button preview
+            const miniPreview = document.createElement("div");
+            miniPreview.style.cssText = `
+          width: 60px;
+          height: 30px;
+          border-radius: ${historicalStyle.borderRadius};
+          background: ${
+            historicalStyle.background ||
+            historicalStyle.backgroundColor ||
+            "transparent"
+          };
+          margin-right: 10px;
+          flex-shrink: 0;
+        `;
+
+            const styleInfo = document.createElement("div");
+            styleInfo.innerHTML = `
+          <div style="font-weight: 600; font-size: 0.9rem;">${
+            historicalStyle.styleType.charAt(0).toUpperCase() +
+            historicalStyle.styleType.slice(1)
+          }</div>
+          <div style="font-size: 0.8rem; opacity: 0.7;">${
+            historicalStyle.text
+          }</div>
+        `;
+
+            historyItem.appendChild(miniPreview);
+            historyItem.appendChild(styleInfo);
+
+            // Add hover effect
+            historyItem.addEventListener("mouseenter", () => {
+              historyItem.style.backgroundColor = "var(--hover-color)";
+              historyItem.style.borderColor = "var(--accent-color)";
+            });
+
+            historyItem.addEventListener("mouseleave", () => {
+              historyItem.style.backgroundColor = "";
+              historyItem.style.borderColor = "var(--border-color)";
+            });
+
+            // Add click event to restore this button
+            historyItem.addEventListener("click", () => {
+              // Calculate the index in the main history array
+              const targetIndex = currentHistoryIndex - index - 1;
+              if (targetIndex >= 0) {
+                // Move current button to redo history
+                for (let i = currentHistoryIndex; i > targetIndex; i--) {
+                  redoHistory.push(buttonStyleHistory[i]);
+                }
+
+                // Set current index
+                currentHistoryIndex = targetIndex;
+
+                // Apply the button style
+                applyButtonStyle(buttonStyleHistory[currentHistoryIndex]);
+
+                // Update buttons and history display
+                updateHistoryButtons();
+                updateButtonHistory();
+
+                // Update code snippets
+                updateAllCodeSnippets(buttonStyleHistory[currentHistoryIndex]);
+              }
+            });
+
+            buttonHistory.appendChild(historyItem);
+          });
+        }
+
+        // Copy code to clipboard
+        function copyCodeToClipboard() {
+          const style = buttonStyleHistory[currentHistoryIndex];
+          if (!style) return;
+
+          let codeToCopy;
+
+          switch (currentTab) {
+            case "html":
+              codeToCopy = style.htmlCode;
+              break;
+            case "css":
+              codeToCopy = style.cssCode;
+              break;
+            case "react":
+              codeToCopy = style.reactCode;
+              break;
+            default:
+              codeToCopy = style.htmlCode;
+          }
+
+          // Create temporary textarea to copy from
+          const textarea = document.createElement("textarea");
+          textarea.value = codeToCopy;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+
+          // Show toast notification
+          copyToast.classList.add("show");
+          setTimeout(() => {
+            copyToast.classList.remove("show");
+          }, 3000);
+        }
+
+        // Utility: Get random item from array
+        function getRandomItem(array) {
+          return array[Math.floor(Math.random() * array.length)];
+        }
+
+        // Utility: Get random number between min and max
+        function getRandomBetween(min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // Utility: Get random option from options
+        function getRandomOption(options) {
+          return options[Math.floor(Math.random() * options.length)];
+        }
+
+        // Utility: Adjust color by percentage
+        function adjustColor(hex, percent) {
+          // Convert hex to RGB
+          let r = parseInt(hex.substring(1, 3), 16);
+          let g = parseInt(hex.substring(3, 5), 16);
+          let b = parseInt(hex.substring(5, 7), 16);
+
+          // Adjust based on percentage
+          r = Math.max(0, Math.min(255, r + percent));
+          g = Math.max(0, Math.min(255, g + percent));
+          b = Math.max(0, Math.min(255, b + percent));
+
+          // Convert back to hex
+          const rr = r.toString(16).padStart(2, "0");
+          const gg = g.toString(16).padStart(2, "0");
+          const bb = b.toString(16).padStart(2, "0");
+
+          return `#${rr}${gg}${bb}`;
+        }
+
+        // Utility: Lighten color
+        function lightenColor(hex, factor) {
+          // Convert hex to RGB
+          let r = parseInt(hex.substring(1, 3), 16);
+          let g = parseInt(hex.substring(3, 5), 16);
+          let b = parseInt(hex.substring(5, 7), 16);
+
+          // Lighten
+          r = Math.min(255, Math.round(r + (255 - r) * factor));
+          g = Math.min(255, Math.round(g + (255 - g) * factor));
+          b = Math.min(255, Math.round(b + (255 - b) * factor));
+
+          // Convert back to hex
+          const rr = r.toString(16).padStart(2, "0");
+          const gg = g.toString(16).padStart(2, "0");
+          const bb = b.toString(16).padStart(2, "0");
+
+          return `#${rr}${gg}${bb}`;
+        }
+
+        // Utility: Hex to RGBA
+        function hexToRgba(hex, alpha) {
+          const r = parseInt(hex.substring(1, 3), 16);
+          const g = parseInt(hex.substring(3, 5), 16);
+          const b = parseInt(hex.substring(5, 7), 16);
+
+          return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
+        // Utility: Escape HTML for code display
+        function escapeHTML(text) {
+          return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+        }
+      });
+    </script>
+  </body>
+</html>
